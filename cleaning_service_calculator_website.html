@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Almendares's Cleaning Services</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffe4ec;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff0f5;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255,105,180,0.3);
+    }
+    h1 {
+      text-align: center;
+      color: #ff1493;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #c71585;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ffb6c1;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      background: #ff1493;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .book-btn { background: #ff69b4; }
+    .note { margin-top: 10px; font-size: 14px; color: #ff1493; text-align: center; }
+    .result { margin-top: 20px; font-size: 20px; text-align: center; font-weight: bold; color: #c71585; }
+    .alt-booking { background: #ff85c1; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Almendares's Cleaning Services</h1>
+
+  <div style="margin-top:15px;background:#fff;border:2px dashed #ff69b4;padding:10px;border-radius:10px;color:#c71585;">
+    <strong>✨ Deep Cleaning Includes:</strong><br>
+    • Detailed bathroom scrubbing<br>
+    • Kitchen deep degreasing<br>
+    • Baseboards & edges<br>
+    • Interior surfaces & MORE<br>
+  </div>
+
+  <label>Name</label>
+  <input type="text" id="name">
+
+  <label>Phone Number</label>
+  <input type="text" id="phone">
+
+  <label>Service Area</label>
+  <select id="area">
+    <option>New Jersey</option>
+    <option>Pennsylvania</option>
+  </select>
+
+  <label>Cleaning Type</label>
+  <select id="cleaningType">
+    <option value="standard">Standard Cleaning</option>
+    <option value="deep">Deep Cleaning</option>
+  </select>
+
+  <label>Property Type</label>
+  <select id="propertyType">
+    <option>House</option>
+    <option>Condo</option>
+    <option>Apartment</option>
+    <option>Commercial</option>
+  </select>
+
+  <label>Bedrooms</label>
+  <input type="number" id="bedrooms" min="0">
+
+  <label>Bathrooms</label>
+  <input type="number" id="bathrooms" min="0">
+
+  <label>Frequency</label>
+  <select id="frequency">
+    <option>One Time</option>
+    <option>Weekly</option>
+    <option>Biweekly</option>
+    <option>Monthly (NJ Only)</option>
+  </select>
+
+  <label>Condition</label>
+  <select id="condition">
+    <option value="0">Light</option>
+    <option value="40">Moderate (+$40)</option>
+    <option value="100">Heavy (+$100)</option>
+  </select>
+
+  <label>Additional Notes</label>
+  <textarea id="notes"></textarea>
+
+  <button onclick="calculatePrice()">Calculate Estimate</button>
+
+  <button class="book-btn" onclick="bookService('iMessage')">Book via iMessage</button>
+  <button class="alt-booking" onclick="bookService('email')">Book via Email</button>
+  <button class="alt-booking" onclick="bookService('whatsapp')">Book via WhatsApp</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+let finalPrice = 0;
+const yourNumber = '16094448535';
+const yourEmail = 'almendaresscleaningservices@gmail.com';
+
+function calculatePrice() {
+  let bedrooms = parseInt(document.getElementById('bedrooms').value) || 0;
+  let bathrooms = parseInt(document.getElementById('bathrooms').value) || 0;
+  let cleaningType = document.getElementById('cleaningType').value;
+  let condition = parseInt(document.getElementById('condition').value);
+
+  let price = 0;
+
+  if (cleaningType === 'standard') {
+    if (bedrooms > 0) price += 40 + (bedrooms - 1) * 25;
+    if (bathrooms > 0) price += 50 + (bathrooms - 1) * 35;
+  } else {
+    if (bedrooms > 0) price += 100 + (bedrooms - 1) * 45;
+    if (bathrooms > 0) price += 120 + (bathrooms - 1) * 55;
+  }
+
+  price += condition;
+  finalPrice = price;
+  document.getElementById('result').innerText = 'Estimated Price: $' + price;
+}
+
+function bookService(method) {
+  let name = document.getElementById('name').value;
+  let phone = document.getElementById('phone').value;
+  let area = document.getElementById('area').value;
+  let type = document.getElementById('cleaningType').value;
+  let bedrooms = document.getElementById('bedrooms').value;
+  let bathrooms = document.getElementById('bathrooms').value;
+
+  let message = `Hi! My name is ${name}. I want to book a cleaning service.\n\nDetails:\nArea: ${area}\nType: ${type}\nBedrooms: ${bedrooms}\nBathrooms: ${bathrooms}\nEstimated Price: $${finalPrice}\n\nYou can reach me at ${phone}.`;
+
+  if (method === 'iMessage') {
+    window.location.href = `sms:${yourNumber}&body=${encodeURIComponent(message)}`;
+  } else if (method === 'email') {
+    window.location.href = `mailto:${yourEmail}?subject=Booking Request&body=${encodeURIComponent(message)}`;
+  } else if (method === 'whatsapp') {
+    window.location.href = `https://wa.me/${yourNumber}?text=${encodeURIComponent(message)}`;
+  }
+}
+</script>
+
+</body>
+</html>
